@@ -1,0 +1,20 @@
+getbonuscard() 
+https://localhost:44336/api/bonuscard/getbonuscard
+[
+    {
+        "id": 1,
+        "cardNumber": "000001",
+        "expirationDate": null,
+        "balance": null,
+        "creationDate": "2021-02-15T21:28:53.843",
+        "clients": []
+    },
+    {
+        "id": 2,
+        "cardNumber": "000002",
+        "expirationDate": null,
+        "balance": null,
+        "creationDate": "2021-02-15T21:29:38.823",
+        "clients": []
+    }
+]

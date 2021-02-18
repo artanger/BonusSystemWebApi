@@ -1,0 +1,26 @@
+http://bonuscard/api/bonuscard
+http://bonuscard/api
+
+
+ public interface IClient
+    {
+        List<Client> GetClients();
+
+    }
+
+
+https://localhost:44336/api/bonuscard/
+
+
+https://localhost:44336/api/bonuscard/30505660689
+
+
+
+
+
+
+
+
+https://localhost:44336/api/bonuscard/getbyphone/30505660689
+
+https://localhost:44336/api/bonuscard/getbynumber/000001
