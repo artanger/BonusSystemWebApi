@@ -40,11 +40,18 @@ namespace BunusSystemWebApi.Controllers
             }
         }
 
-        //[HttpGet("[action]")]
-        //public IActionResult GetBonusCard()
-        //{
-
-        //}
+        [HttpGet("[action]")]
+        public IActionResult SayHello()
+        {
+            try
+            {
+                return Ok("Hello!");
+            }
+            catch (Exception ex)
+            { 
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]/{phone}")]
         public IActionResult GetByPhone(string phone)
