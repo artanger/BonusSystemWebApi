@@ -24,19 +24,17 @@ namespace BunusSystemWebApi.Controllers
         {
             try
             {
-                var messages = _bonusCardRepository.GetBonusCards();
-                if (messages == null)
+                var cards = _bonusCardRepository.GetBonusCards();
+                if (cards == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(messages);
+                return Ok(cards);
             }
             catch (Exception ex)
             {
-                var ttt = ex.Message;
-
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -68,9 +66,7 @@ namespace BunusSystemWebApi.Controllers
             }
             catch (Exception ex)
             {
-                var ttt = ex.Message;
-
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -90,9 +86,7 @@ namespace BunusSystemWebApi.Controllers
             }
             catch (Exception ex)
             {
-                var ttt = ex.Message;
-
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -111,9 +105,7 @@ namespace BunusSystemWebApi.Controllers
             }
             catch (Exception ex)
             {
-                var ttt = ex.Message;
-
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -132,9 +124,7 @@ namespace BunusSystemWebApi.Controllers
             }
             catch (Exception ex)
             {
-                var ttt = ex.Message;
-
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
