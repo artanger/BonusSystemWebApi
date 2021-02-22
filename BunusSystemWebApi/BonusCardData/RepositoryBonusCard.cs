@@ -136,7 +136,8 @@ namespace BunusSystemWebApi.BonusCardData
                     Balance = bc.Balance,
                     ExpirationDate = bc.ExpirationDate,
                     CreationDate = bc.CreationDate,
-                    Id = cl.Id
+                    Id = cl.Id,
+                    BonusCardId = cl.BonusCardId
                 }).AsQueryable();
         }
 
