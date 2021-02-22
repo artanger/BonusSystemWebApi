@@ -12,7 +12,5 @@ namespace BunusSystemWebApi.Models
         public string Lastname { get; set; }
         public string PhoneNumber { get; set; }
         public int? BonusCardId { get; set; }
-
-        public virtual BonusCard BonusCard { get; set; }
     }
 }

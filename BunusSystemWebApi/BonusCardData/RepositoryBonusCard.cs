@@ -134,8 +134,9 @@ namespace BunusSystemWebApi.BonusCardData
                     PhoneNumber = cl.PhoneNumber,
                     CardNumber = bc.CardNumber,
                     Balance = bc.Balance,
-                    ExpirationDate = bc.ExpirationDate
-
+                    ExpirationDate = bc.ExpirationDate,
+                    CreationDate = bc.CreationDate,
+                    Id = cl.Id
                 }).AsQueryable();
         }
 
@@ -170,7 +171,7 @@ namespace BunusSystemWebApi.BonusCardData
                 }
             }
 
-            var bonusCard = new BonusCard() { ExpirationDate = dateExpValue, Balance = 0 };
+            var bonusCard = new BonusCard() { ExpirationDate = dateExpValue, Balance = 0, CreationDate = DateTime.UtcNow };
 
             bonusCardDB.BonusCards.Add(bonusCard); 
 

@@ -32,7 +32,6 @@ namespace BunusSystemWebApi
 
             services.AddControllersWithViews();
             services.AddSession();
-            //services.AddTransient<IBonusCardData, MockBonusCardData>();
             services.AddScoped<IBonusCardRepository, RepositoryBonusCard>();
             services.AddDbContext<BonusCardDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
