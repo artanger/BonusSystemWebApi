@@ -10,6 +10,7 @@ namespace BunusSystemWebApi.BonusCardData
     public class RepositoryBonusCard : IBonusCardRepository
     {
         private BonusCardDBContext bonusCardDB;
+
         public RepositoryBonusCard(BonusCardDBContext bonusCardDB)
         {
             this.bonusCardDB = bonusCardDB;
@@ -69,7 +70,7 @@ namespace BunusSystemWebApi.BonusCardData
             }
         }
 
-        public List<BonusCard> GetBonusCards()
+        public IEnumerable<BonusCard> GetBonusCards()
         {
             if (bonusCardDB != null)
             {
@@ -100,10 +101,9 @@ namespace BunusSystemWebApi.BonusCardData
                 return null;
             }
 
-            return bonusCardDB.BonusCards.Join(bonusCardDB.Clients, 
-                    bc => bc.Id, cl => cl.BonusCardId,
-                    (bc, cl) => FillBonusCard(bc, cl))
-                    .Where(x => x.CardNumber.Equals(cardnumber)).FirstOrDefault();
+            var bonusCardsAdvanced = GetAdvancedCardsJoin(bonusCardDB);
+
+            return bonusCardsAdvanced.Where(x => x.CardNumber.Equals(cardnumber)).FirstOrDefault();
         }
 
         public IEnumerable<BonusCardAdvanced> GetCardByPhoneAdvanced(string phone)
@@ -113,23 +113,30 @@ namespace BunusSystemWebApi.BonusCardData
                 return null;
             }
 
-            return bonusCardDB.BonusCards.Join(bonusCardDB.Clients, 
-                    bc => bc.Id, cl => cl.BonusCardId,
-                    (bc, cl) => FillBonusCard(bc, cl))
-                    .Where(x => x.PhoneNumber.Contains(phone)).ToList();
-        } 
+            var bonusCardsAdvanced = GetAdvancedCardsJoin(bonusCardDB);
 
-        private BonusCardAdvanced FillBonusCard(BonusCard bc, Client cl)
+            return bonusCardsAdvanced.Where(x => x.PhoneNumber.Contains(phone)).ToList();
+
+            //return bonusCardDB.BonusCards.Join(bonusCardDB.Clients, 
+            //        bc => bc.Id, cl => cl.BonusCardId,
+            //        (bc, cl) => FillBonusCard(bc, cl))
+            //        .Where(x => x.PhoneNumber.Contains(phone)).ToList();
+        }
+
+        private static IQueryable<BonusCardAdvanced> GetAdvancedCardsJoin(BonusCardDBContext context)
         {
-            return new BonusCardAdvanced
-            {
-                FirstName = cl.Firstname,
-                LastName = cl.Lastname,
-                PhoneNumber = cl.PhoneNumber,
-                CardNumber = bc.CardNumber,
-                Balance = bc.Balance,
-                ExpirationDate = bc.ExpirationDate
-            };
+            return context.BonusCards.Join(context.Clients,
+                bc => bc.Id, cl => cl.BonusCardId,
+                (bc, cl) => new BonusCardAdvanced
+                {
+                    FirstName = cl.Firstname,
+                    LastName = cl.Lastname,
+                    PhoneNumber = cl.PhoneNumber,
+                    CardNumber = bc.CardNumber,
+                    Balance = bc.Balance,
+                    ExpirationDate = bc.ExpirationDate
+
+                }).AsQueryable();
         }
 
         public string CreateNewBonusCard(string phone, string expirationdate)
@@ -182,6 +189,44 @@ namespace BunusSystemWebApi.BonusCardData
         //    return bonuscards;
         //}
 
+        public IEnumerable<Client> GetClients()
+        {
+            if (bonusCardDB != null)
+            {
+                return bonusCardDB.Clients
+                            .OrderBy(x => x.BonusCardId).ToList();
+            }
 
+            return null;
+        }
+
+        public string CreateNewClient(string firstName, string lastName, string phone)
+        {
+            if (bonusCardDB == null)
+            {
+                return "DB Error";
+            }
+
+            var alreadyExisting = bonusCardDB.Clients.Where(c => c.PhoneNumber.Equals(phone)).ToList();
+            if (alreadyExisting.Any())
+            {
+                return "Client with the same Phone Number already exists. Please change the Phone Number.";
+            }
+            else
+            {
+                var newClient = new Client
+                {
+                    Firstname = firstName,
+                    Lastname = lastName,
+                    PhoneNumber = phone
+                };
+
+                bonusCardDB.Add(newClient);
+
+                bonusCardDB.SaveChanges();
+
+                return "Success";
+            }
+        }
     }
 }

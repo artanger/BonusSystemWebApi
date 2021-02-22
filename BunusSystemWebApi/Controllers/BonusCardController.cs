@@ -14,6 +14,7 @@ namespace BunusSystemWebApi.Controllers
     public class BonusCardController : ControllerBase
     {
         private IBonusCardRepository _bonusCardRepository;
+
         public BonusCardController(IBonusCardRepository bonusCardRepository)
         {
             this._bonusCardRepository = bonusCardRepository;

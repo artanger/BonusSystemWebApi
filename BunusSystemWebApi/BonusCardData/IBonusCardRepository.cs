@@ -6,7 +6,7 @@ namespace BunusSystemWebApi.BonusCardData
 {
     public interface IBonusCardRepository
     {
-        List<BonusCard> GetBonusCards();
+        IEnumerable<BonusCard> GetBonusCards();
         
         BonusCard GetCardByNumber(string cardnumber);
 
@@ -19,6 +19,10 @@ namespace BunusSystemWebApi.BonusCardData
         BonusCard RemoveFromCardByNumber(string cardnumber, int value);
 
         string CreateNewBonusCard( string phone, string expirationdate);
+
+        IEnumerable<Client> GetClients();
+
+        string CreateNewClient(string firstName, string lastName, string phone);
 
     }
 }
