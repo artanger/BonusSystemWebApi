@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -25,6 +26,8 @@ namespace BunusSystemWebApi.Models
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Server=DESKTOP-JC81B6E\\SQLEXPRESS;Database=BonusCardDB;Trusted_Connection=True;");
+
+                //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             }
         }
 
@@ -40,9 +43,8 @@ namespace BunusSystemWebApi.Models
 
                 entity.Property(e => e.CardNumber).HasMaxLength(6);
 
-                entity.Property(e => e.CreationDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+                    //.HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
             });
@@ -77,5 +79,6 @@ namespace BunusSystemWebApi.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
     }
 }
