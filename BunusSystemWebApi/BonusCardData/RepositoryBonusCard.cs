@@ -125,20 +125,37 @@ namespace BunusSystemWebApi.BonusCardData
 
         private static IQueryable<BonusCardAdvanced> GetAdvancedCardsJoin(BonusCardDBContext context)
         {
-            return context.BonusCards.Join(context.Clients,
-                bc => bc.Id, cl => cl.BonusCardId,
-                (bc, cl) => new BonusCardAdvanced
-                {
-                    FirstName = cl.Firstname,
-                    LastName = cl.Lastname,
-                    PhoneNumber = cl.PhoneNumber,
-                    CardNumber = bc.CardNumber,
-                    Balance = bc.Balance,
-                    ExpirationDate = bc.ExpirationDate,
-                    CreationDate = bc.CreationDate,
-                    Id = cl.Id,
-                    BonusCardId = cl.BonusCardId
-                }).AsQueryable();
+            //return context.BonusCards.Join(context.Clients,
+            //    bc => bc.Id, cl => cl.BonusCardId,
+            //    (bc, cl) => new BonusCardAdvanced
+            //    {
+            //        FirstName = cl.Firstname,
+            //        LastName = cl.Lastname,
+            //        PhoneNumber = cl.PhoneNumber,
+            //        CardNumber = bc.CardNumber,
+            //        Balance = bc.Balance,
+            //        ExpirationDate = bc.ExpirationDate,
+            //        CreationDate = bc.CreationDate,
+            //        Id = cl.Id,
+            //        BonusCardId = cl.BonusCardId
+            //    }).AsQueryable();
+
+            return from cl in context.Clients
+                    join bc in context.BonusCards
+                        on cl.BonusCardId equals bc.Id into grouping
+                    from bc in grouping.DefaultIfEmpty()
+                    select new BonusCardAdvanced
+                    {
+                        FirstName = cl.Firstname,
+                        LastName = cl.Lastname,
+                        PhoneNumber = cl.PhoneNumber,
+                        CardNumber = bc.CardNumber,
+                        Balance = bc.Balance,
+                        ExpirationDate = bc.ExpirationDate,
+                        CreationDate = bc.CreationDate,
+                        Id = cl.Id,
+                        BonusCardId = cl.BonusCardId
+                    };
         }
 
         public string CreateNewBonusCard(string phone, string expirationdate)

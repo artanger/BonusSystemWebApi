@@ -47,7 +47,7 @@ namespace BunusSystemWebApi.Controllers
                 return Ok("Hello!");
             }
             catch (Exception ex)
-            { 
+            {
                 return BadRequest();
             }
         }
@@ -91,12 +91,33 @@ namespace BunusSystemWebApi.Controllers
             }
         }
 
-        [HttpGet("[action]/{number}/{value}")]
-        public IActionResult AddToCard(string number, int value)
+        /// <summary>
+        /// Update ballance for the credit card
+        /// </summary>
+        /// <param name="number"> Card Number</param>
+        /// <param name="value"> Value to add to or remove from credit card</param>
+        /// <param name="type"> 1 - add to card; 0 - remove from card</param>
+        /// <returns></returns>
+        [HttpPost("[action]")]
+        public IActionResult Update(string number, int value, int type)
         {
             try
             {
-                var card = _bonusCardRepository.AddToCardByNumber(number, value);
+                BonusCard card = null;
+
+                if (type.Equals(1))
+                {
+                    card = _bonusCardRepository.AddToCardByNumber(number, value);
+                }
+                else if (type.Equals(0))
+                {
+                    card = _bonusCardRepository.RemoveFromCardByNumber(number, value);
+                }
+                else
+                {
+                    throw new Exception("Incorrect 'type' parameter's value");
+                }
+
                 if (card == null)
                 {
                     return NotFound();
@@ -110,31 +131,12 @@ namespace BunusSystemWebApi.Controllers
             }
         }
 
-        [HttpGet("[action]/{number}/{value}")]
-        public IActionResult RemoveFromCard(string number, int value)
+        [HttpPost]
+        public IActionResult CreateBonusCard(string phone, string expdate)
         {
             try
             {
-                var card = _bonusCardRepository.RemoveFromCardByNumber(number, value);
-                if (card == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(card);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("[action]/{phone}/{expirationdate}")]
-        public IActionResult CreateBonusCard(string phone, string expirationdate)
-        {
-            try
-            {
-                var result = _bonusCardRepository.CreateNewBonusCard(phone, expirationdate);
+                var result = _bonusCardRepository.CreateNewBonusCard(phone, expdate);
                 if (!result.Equals("Success"))
                 {
                     return ValidationProblem(result);
